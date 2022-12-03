@@ -1,4 +1,5 @@
 local luadev_inspect = require'luadev.inspect'
+local notify = require('notify')
 
 local a = vim.api
 if _G._luadev_mod == nil then
@@ -21,12 +22,13 @@ local function open_win()
     return
   end
   create_buf()
-  local w0 = a.nvim_get_current_win()
-  a.nvim_command("new")
-  local w = a.nvim_get_current_win()
-  a.nvim_win_set_buf(w,s.buf)
-  a.nvim_set_current_win(w0)
-  s.win = w
+  -- local w0 = a.nvim_get_current_win()
+  -- a.nvim_command("enew")
+  -- local w = a.nvim_get_current_win()
+  -- a.nvim_win_set_buf(w,s.buf)
+  -- a.nvim_set_current_win(w0)
+  -- s.win = w
+  vim.cmd("e")
 end
 
 local function dosplit(str, delimiter)
@@ -78,6 +80,8 @@ local function luadev_print(...)
     strs[i] = tostring(args[i])
   end
   append_buf(table.concat(strs, ' '))
+
+  notify(table.concat(strs, ' '), 'info', {{title='Print'}})
 end
 
 local function dedent(str, leave_indent)
@@ -158,6 +162,9 @@ local function exec(str)
     end
   end
   append_buf({""})
+
+  notify("Done", 'info', {{title='Done : result'}})
+
 end
 
 local function start()
